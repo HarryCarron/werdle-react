@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+import { useState, useRef } from 'react';
+import WordRow from './components/WordRow/WordRow';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const rawWords = [
+        'pears',
+        'smelt',
+        'lends',
+        'needs',
+        'dream'
+    ];
+
+    const words = useRef(rawWords.map(word => word.split('')));
+
+    const [activeRow, setActiveRow] = useState(0);
+
+    return (
+        <div className="w-100 vh-100 d-flex center-child-xy">
+            <div className="container d-flex-col">
+                { words.current.map((word, i) => <WordRow targetWord={ rawWords[4] } setActiveRow={ setActiveRow } rowId={i} activeRow={ activeRow } key={i} word = { word }/>) }
+            </div>
+        </div>
+    );
 }
 
 export default App;
