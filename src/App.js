@@ -1,25 +1,38 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import WordRow from './components/WordRow/WordRow';
 import './App.css';
 
 function App() {
 
-    const rawWords = [
-        'pears',
-        'smelt',
-        'lends',
-        'needs',
-        'dream'
+    const targetWords = [
+        'dream',
+        'unite',
+        'guard',
+        'paint',
+        'glove',
     ];
 
-    const words = useRef(rawWords.map(word => word.split('')));
+    const rows = [0, 1, 2, 3, 4];
 
+
+    const [activeWord, setActiveWord] = useState(0);
     const [activeRow, setActiveRow] = useState(0);
+
+    const nextWord = () => {
+        setActiveRow(0);
+        setActiveWord(activeWord + 1);
+    }
 
     return (
         <div className="w-100 vh-100 d-flex center-child-xy">
             <div className="container d-flex-col">
-                { words.current.map((word, i) => <WordRow targetWord={ rawWords[4] } setActiveRow={ setActiveRow } rowId={i} activeRow={ activeRow } key={i} word = { word }/>) }
+                { rows.map(i => <WordRow
+                key={ i }
+                targetWord={ targetWords[activeWord] }
+                nextWord = { nextWord }
+                setActiveRow = { setActiveRow }
+                rowId={i}
+                activeRow={ activeRow }/>) }
             </div>
         </div>
     );

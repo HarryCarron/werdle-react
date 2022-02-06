@@ -17,6 +17,21 @@ html {
     font-size: 1.7em;
 }
 
+.flip {
+    animation-duration: 0.4s;
+    animation-name: flip;
+    animation-fill-mode: forwards;
+}
+
+@keyframes flip {
+    from {
+        transform: rotateX(0deg);
+    }
+    to {
+        transform: rotateX(180deg);
+    }
+}
+
 .center-child-xy {
     display: flex;
     justify-content: center;

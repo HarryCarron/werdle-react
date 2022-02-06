@@ -1,19 +1,41 @@
 import './WordRow.css';
 import { useEffect, useRef, useState } from 'react';
+import EntryCell from './../letterCells/EntryCell/EntryCell';
+import RevealCell from './../letterCells/RevealCell/RevealCell';
+import StandardCell from './../letterCells/StandardCell/StandardCell';
 
 export default function WordRow(props) {
 
+    const cellsX = [0, 1, 2, 3, 4];
+
     let cells = useRef([]);
 
-    let [render, setRender] = useState(0);
+    const [update, setUpdate] = useState(0);
+    const [letterEntry, setLetterEntry] = useState([]);
 
     useEffect(() => {
-        cells.current = props.word.map(_ => StandardCell);
-        setRender(!render);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        cells.current = cellsX.map(_ => StandardCell());
+        setUpdate(!update);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const [letterEntry, setLetterEntry] = useState([]);
+    useEffect(() => {
+        setLetterEntry([]);
+        cells.current = cellsX.map(_ => StandardCell());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.targetWord]);
+
+    useEffect(() => {
+        if (letterEntry.length === 5) {
+            if (letterEntry.join('') === props.targetWord) {
+                setTimeout(_ => props.nextWord(), 1000);
+                
+            } else {
+                props.setActiveRow(props.rowId + 1);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [letterEntry])
 
     const onLetterEntry = (event) => {
         const value = event.target.value;
@@ -24,54 +46,35 @@ export default function WordRow(props) {
 
         const targetLetters = props.targetWord.split('');
 
-        return entry.map((e, i) => {
-            if (e === targetLetters[i]) {
-                return ExactMatchFilledCell;
+        return entry.map((letter, i) => {
+            let mode;
+            if (letter === targetLetters[i]) {
+                mode = 0;
+            } else if (targetLetters.includes(letter)) {
+                mode = 1;
+            } else {
+                mode = 2;
             }
-            if (targetLetters.includes(e)) {
-                return NonExactMatchFilledCell;
-            }
-            return NoMatchCell;
+
+            return RevealCell(letter, mode);
         })
+    }
+
+    const getEntryCells = () => {
+        return cellsX.map((_, i) => letterEntry.length === i ? EntryCell(onLetterEntry) : StandardCell(letterEntry[i], i === (letterEntry.length - 1)));
     }
 
     if (props.rowId === props.activeRow) {
         if (letterEntry.length === 5) {
             cells.current = getRevealCells(letterEntry);
-            props.setActiveRow(props.rowId + 1);
         } else {
-            cells.current = props.word.map((_, i) => letterEntry.length === i ? EntryCell : StandardCell);
+            cells.current = getEntryCells(letterEntry);
         }
     }
 
-    let classList = "w-100 d-flex flex-1 ";
-    classList += props.isActiveRow ? 'active-row' : '';
-
     return (
-        <div className = { classList }>
-            { cells.current.map((Cell, i) => <Cell {...props} letter={letterEntry[i]} onLetterEntry={ onLetterEntry }/>) }
+        <div className ="d-flex">
+            { cells.current.map((Cell, i) => <div key={i}>{Cell}</div>) }
         </div>
     );
-}
-
-function StandardCell({letter}) {
-    return (<div className="letter-cell d-flex center-child-xy">{ letter }</div>);
-}
-
-function ExactMatchFilledCell({letter}) {
-    return (<div className="letter-cell d-flex center-child-xy exact-match">{letter}</div>);
-}
-
-function NonExactMatchFilledCell({letter}) {
-    return (<div className="letter-cell d-flex center-child-xy non-exact-match">{letter}</div>);
-}
-
-function NoMatchCell({letter}) {
-    return (<div className="letter-cell d-flex center-child-xy non-exact-match no-match">{letter}</div>);
-}
-
-function EntryCell({onLetterEntry}) {
-    return (<div className="letter-cell d-flex center-child-xy">
-        <input onChange={e => onLetterEntry(e)} className="w-100 entry" autoFocus="autofocus"/>
-    </div>);
 }

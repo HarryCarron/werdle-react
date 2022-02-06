@@ -1,19 +1,38 @@
 .letter-cell {
+    -webkit-box-sizing: border-box;
+    /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;
+    /* Firefox, other Gecko */
+    box-sizing: border-box;
+    /* Opera/IE 8+ */
     text-transform: capitalize;
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgb(119, 119, 119);
     margin: 5px;
-    padding: 10px;
-    border-radius: 2px;
+    width: 60px;
+    height: 60px;
+    border: 2px solid #747474;
 }
 
-.active-cell {
-    border: 1px solid rgb(133, 133, 133);
+.cell {
+    -webkit-box-sizing: border-box;
+    /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;
+    /* Firefox, other Gecko */
+    box-sizing: border-box;
+    /* Opera/IE 8+ */
+    text-transform: capitalize;
+    margin: 5px;
+    width: 60px;
+    height: 60px;
+}
+
+.letter-cell.entry-cell {
+    box-sizing: border-box;
+    border: 2px solid #e2e2e2;
 }
 
 .entry {
     background-color: transparent;
+    caret-color: transparent;
     padding: 0;
     border: none;
     font-size: 1.1em;
@@ -21,16 +40,137 @@
 }
 
 .exact-match {
+    -webkit-box-sizing: border-box;
+    /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;
+    /* Firefox, other Gecko */
+    box-sizing: border-box;
+    /* Opera/IE 8+ */
     background-color: #6aaa64;
-    border: 3px solid #6aaa64;
+    border: 2px solid #6aaa64;
 }
 
 .non-exact-match {
+    -webkit-box-sizing: border-box;
+    /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;
+    /* Firefox, other Gecko */
+    box-sizing: border-box;
+    /* Opera/IE 8+ */
     background-color: #b59f3b;
-    border: 3px solid #b59f3b;
+    border: 2px solid #b59f3b;
 }
 
 .no-match {
-    background-color: rgb(133, 133, 133);
-    border: 3px solid rgb(133, 133, 133);
+    -webkit-box-sizing: border-box;
+    /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;
+    /* Firefox, other Gecko */
+    box-sizing: border-box;
+    /* Opera/IE 8+ */
+    background-color: #3a3a3c;
+    border: 2px solid #3a3a3c;
+}
+
+.jump {
+    animation-duration: 0.5s;
+    animation-name: jump;
+}
+
+@keyframes jump {
+    from {
+        transform: scale(1.15);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.pulse {
+    animation-duration: 1s;
+    animation-name: pulse;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    75% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.shake {
+    animation-delay: 1s;
+    transform-origin: center center;
+    animation-duration: 1s;
+    animation-name: shake;
+    animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-10deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+    75% {
+        transform: rotate(-10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
+/* flip */
+
+.flip-card {
+    perspective: 1000px;
+    transition: 1s;
+    transform: rotateY(180deg);
+}
+
+
+/* This container is needed to position the front and back side */
+
+.flip-card-inner {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+
+.flip-card .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+
+/* Position the front and back side */
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+
+/* Style the back side */
+
+.flip-card-back {
+    transform: rotateX(180deg);
 }
