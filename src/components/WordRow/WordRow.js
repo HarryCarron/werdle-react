@@ -38,6 +38,7 @@ export default function WordRow(props) {
     }, [letterEntry])
 
     const onLetterEntry = (event) => {
+        console.log(event);
         const value = event.target.value;
         setLetterEntry([...letterEntry, value]);
     }
